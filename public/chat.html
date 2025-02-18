@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Google Docs</title>
+        <link rel="icon" href="fav.png" type="image/png">
+        <!-- PeerJS and Vue.js libraries -->
+        <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        
+        <!-- Font and Materialize CSS for styling -->
+        <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        
+        <!-- Custom CSS -->
+        <style>
+            body {
+                font-family: "Red Hat Display", sans-serif;
+                background-color: #121212;
+                color: #ffffff;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .glass-box {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border-radius: 15px;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            h1, h4, h5, p, label, em {
+                color: #ffffff;
+            }
+
+            .input-field input {
+                color: #ffffff;
+                border-bottom: 1px solid #ffffff;
+            }
+
+            .input-field input:focus {
+                border-bottom: 1px solid #7e57c2 !important;
+                box-shadow: 0 1px 0 0 #7e57c2 !important;
+            }
+
+            .input-field label {
+                color: #b0bec5;
+            }
+
+            .input-field input:focus + label {
+                color: #7e57c2 !important;
+            }
+
+            .btn, .btn-large, .btn-floating {
+                background-color: #7e57c2;
+            }
+
+            .btn:hover, .btn-large:hover, .btn-floating:hover {
+                background-color: #9575cd;
+            }
+
+            #chatbox {
+                height: 300px;
+                overflow-y: auto;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+
+            #users, #chat {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="app" class="container">
+            <!-- Login screen -->
+            <div id="login" v-if="screen === 'login'" class="glass-box">
+                <h1>Made by Shadow</h1>
+                <h4>Enter your username</h4>
+        
+                <div class="row">
+                    <form v-on:submit="submitLogin">
+                        <div class="input-field col s8">
+                            <input :disabled="loading" id="username" type="text" v-model="usernameInput" />
+                            <label for="username">My username</label>
+                        </div>
+                        <button v-bind:class="{ disabled: loading }" class="btn-large waves-effect waves-light col s4" type="submit">
+                            Login<i class="material-icons right">login</i>
+                        </button>
+                    </form>
+                </div>
+
+                <p v-if="loading">Loading...</p>
+                <p v-if="peerError" style="color: #ff5252;">{{ peerError }}</p>
+            </div>
+
+            <!-- Chat screen -->
+            <div id="chat" v-if="screen === 'chat'" class="glass-box">
+                <h1>Made by Shadow</h1>
+                <p>Your username: {{ usernameInput }}</p>
+
+                <div class="row">
+                    <div id="users" class="col s12 m5 glass-box">
+                        <div class="row">
+                            <!-- Connection form -->
+                            <div v-if="!peer.disconnected">
+                                <form v-on:submit="submitConnection">
+                                    <div class="input-field col s8">
+                                        <input :disabled="loading" id="target_id" type="text" v-model="targetIdInput" />
+                                        <label for="target_id">Target username</label>
+                                    </div>
+                                    <button v-bind:class="{ disabled: loading }" class="btn-large waves-effect waves-light col s4" type="submit">
+                                        Connect<i class="material-icons right">login</i>
+                                    </button>
+                                </form>
+    
+                                <button class="btn-large waves-effect waves-light col s12" v-on:click="disconnectPeer">
+                                    Disconnect from server<i class="material-icons right">logout</i>
+                                </button>
+    
+                                <div class="col s12">
+                                    <em v-if="peerError" style="color: #ff5252;">{{ peerError }}</em>
+                                </div>
+                            </div>
+                            <div v-else class="container">
+                                <h5>You are disconnected!</h5>
+                                <em>You can still talk to connected users, but won't be able to reach or be reached by any new user!</em>
+                            </div>
+
+                            <div class="col s12">
+                                <h4>Connected users</h4>
+                                <p><i class="material-icons">portrait</i>{{ usernameInput }}</p>
+                                <p v-for="peerId in peerIds" :key="peerId">
+                                    <i class="material-icons">portrait</i>{{ getUsername(peerId) }}
+                                </p>
+                            </div>
+                            <div class="col s12">
+                                <h4>Online users</h4>
+                                <p v-for="peerId in peerIds" :key="peerId">
+                                    <i class="material-icons">portrait</i>{{ getUsername(peerId) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m7">
+                        <h4>Chatbox</h4>
+                        <div id="chatbox" class="glass-box">
+                            <p v-for="chat in chats" :key="chat.timestamp">{{ chat.sender }}: {{ chat.message }}</p>
+                        </div>
+                        <div class="row">
+                            <form v-on:submit="submitChat">
+                                <div class="input-field col s10">
+                                    <input id="chat_message" type="text" v-model="chatMessageInput" />
+                                    <label for="chat_message">Your message</label>
+                                </div>
+                                <button class="btn-floating btn-large waves-effect waves-light" type="submit">
+                                    <i class="material-icons">send</i>
+                                </button>
+                            </form>
+                        </div>
+                        <button class="btn waves-effect waves-light red" @click="resetChat">
+                            Reset Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom JavaScript -->
+        <script src="chat.js"></script>
+    </body>
+</html>

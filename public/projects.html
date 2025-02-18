@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Space Games</title>
+  <link rel="icon" type="image/x-icon" href="fav.png">
+
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- AOS for scroll animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+    <style>
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .nav-item {
+            margin: 0.5rem 0;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #94a3b8;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 1.25rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.08);
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1.125rem;
+            color: #94a3b8;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .settings-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .settings-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: rgba(32, 32, 32, 0.9);
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .settings-dropdown-content a {
+            color: #ffffff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.875rem;
+        }
+
+        .settings-dropdown-content a:hover {
+            background-color: #4a4a4a;
+        }
+
+        .settings-dropdown:hover .settings-dropdown-content {
+            display: block;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(to bottom right, #0f172a, #1e293b);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .game-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+        }
+
+        .game-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-item p {
+            color: #e2e8f0;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 240px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            z-index: 50;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem;
+            min-height: 100vh;
+            max-width: calc(100vw - 240px);
+        }
+
+        .search-container {
+            margin: 1rem auto 2rem;
+            max-width: 600px;
+            padding: 0 1rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+
+        .app-button {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            cursor: pointer;
+        }
+
+        .app-button img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-button p {
+            color: #e2e8f0;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="relative">
+    <div id="particles-js"></div>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-rocket text-blue-500 text-2xl"></i>
+            <span class="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">Space Games</span>
+        </div>
+        
+        <nav class="flex flex-col space-y-2">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="projects.html" class="nav-item active">
+                <i class="fas fa-gamepad"></i>
+                <span>Games</span>
+            </a>
+            <a href="search.html" class="nav-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Proxy</span>
+            </a>
+            <a href="games.html" class="nav-item">
+                <i class="fas fa-window-maximize"></i>
+                <span>Apps</span>
+            </a>
+            <a href="chat.html" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Chat Room</span>
+            </a>
+            
+            <!-- Settings Dropdown -->
+            <div class="settings-dropdown">
+                <button class="nav-item w-full text-left">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="settings-dropdown-content">
+                    <a href="settings.html">Website Settings</a>
+                    <a href="links.html">Links</a>
+                    <div class="px-4 py-2 text-sm text-gray-400 border-t border-gray-700">Made by: Shadowded</div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            © 2024 Space Games
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1 class="title">Games Collection</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for games..." class="w-full">
+        </div>
+        <div class="game-grid" id="gameGrid">
+            <!-- Games will be populated here -->
+        </div>
+    </main>
+
+    <footer class="bg-transparent py-8 text-center relative z-10">
+        <p class="text-purple-400">© 2024 Space Games - Reach for the Stars!</p>
+    </footer>
+
+    <!-- Particle.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 86, density: { enable: true, value_area: 800 } },
+            color: { value: '#ffffff' },
+            shape: { type: 'circle', stroke: { width: 0, color: '#000000' }, polygon: { nb_sides: 5 } },
+            opacity: { value: 1, random: true },
+            size: { value: 2, random: true },
+            line_linked: { enable: false },
+            move: { enable: true, speed: 0.5, direction: 'bottom', out_mode: 'out' }
+          },
+          interactivity: {
+            detect_on: 'window',
+            events: { onclick: { enable: true, mode: 'push' } },
+            modes: { bubble: { distance: 400, size: 40, duration: 2 }, push: { particles_nb: 10 } }
+          },
+          retina_detect: true
+        });
+      </script>
+
+    <!-- AOS for Scroll Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+    <!-- Game data and rendering script -->
+    <script>
+        let gamesData = [];
+
+        // Fetch the game data from g.json and initialize
+        fetch('g.json')
+            .then(response => response.json())
+            .then(games => {
+                gamesData = games;
+                populateGameGrid(games);
+            })
+            .catch(error => console.error('Error loading game data:', error));
+
+        // Populate games in the grid
+        function populateGameGrid(games) {
+            const gameGrid = document.getElementById('gameGrid');
+            gameGrid.innerHTML = ''; // Clear existing content
+
+            // Add Monkey Mart
+            const monkeyMart = document.createElement('div');
+            monkeyMart.className = 'game-item';
+            monkeyMart.innerHTML = `
+                <a href="MonkeyMart/index.html" class="app-button">
+                    <img src="monkeymart.jpg" alt="Monkey Mart">
+                    <p>Monkey Mart</p>
+                </a>
+            `;
+            gameGrid.appendChild(monkeyMart);
+
+            // Add Crazy Drift
+            const crazyDrift = document.createElement('div');
+            crazyDrift.className = 'game-item';
+            crazyDrift.innerHTML = `
+                <a href="crazy-drifter/index.html" class="app-button">
+                    <img src="512.jpg" alt="Crazy Drift">
+                    <p>Crazy Drift</p>
+                </a>
+            `;
+            gameGrid.appendChild(crazyDrift);
+
+            // Add other games from g.json
+            games.forEach(game => {
+                const gameItem = document.createElement('div');
+                gameItem.className = 'game-item';
+                gameItem.innerHTML = `
+                    <div class="app-button" onclick="launch('${game.url}');">
+                        <img src="${game.img}" alt="${game.name}">
+                        <p>${game.name}</p>
+                    </div>
+                `;
+                gameGrid.appendChild(gameItem);
+            });
+        }
+
+        // Filter games by search term
+        document.getElementById('searchInput').addEventListener('input', filterGames);
+
+        function filterGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+
+            const filteredGames = gamesData.filter(game => 
+                game.name.toLowerCase().includes(searchInput)
+            );
+
+            populateGameGrid(filteredGames);
+
+            // Always show Monkey Mart and Crazy Drift
+            const gameGrid = document.getElementById('gameGrid');
+            const monkeyMart = gameGrid.querySelector('.game-item:first-child');
+            const crazyDrift = gameGrid.querySelector('.game-item:nth-child(2)');
+
+            if (monkeyMart) {
+                monkeyMart.style.display = 'Monkey Mart'.toLowerCase().includes(searchInput) ? 'block' : 'none';
+            }
+            if (crazyDrift) {
+                crazyDrift.style.display = 'Crazy Drift'.toLowerCase().includes(searchInput) ? 'block' : 'none';
+            }
+        }
+
+        // Launch game in a new window
+        function launch(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            window.open(url, '_blank');
+        }
+    </script>
+
+<script src="hotkey.js"></script>
+<script src="uv/uv.bundle.js" defer></script>
+<script src="uv/uv.config.js" defer></script>
+<script src="/launchgames.js" defer></script>
+</body>
+</html>

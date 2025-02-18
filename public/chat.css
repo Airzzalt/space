@@ -1,0 +1,52 @@
+body {
+    font-family: "Red Hat Display";
+    background-color: #000000; /* Light grey */
+    background-size: cover;
+    color: white; /* Ensures all text is white */
+}
+
+h1, h4, h5, p, label, em {
+    color: white !important; /* Override default Materialize colors */
+}
+
+.input-field input {
+    color: white; /* Input text color */
+}
+
+.input-field input:focus + label,
+.input-field input[type=text]:not(.browser-default):focus + label {
+    color: white; /* Focused input label color */
+}
+
+.input-field input:focus {
+    border-bottom: 1px solid white !important; /* Focused input underline */
+    box-shadow: 0 1px 0 0 white !important; /* Focused input shadow */
+}
+
+#chatbox {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+    color: white;
+    padding: 1rem;
+}
+
+div {
+    text-align: center;
+}
+
+p {
+    margin: 0.18em;
+}
+
+#chatbox {
+    height: 25rem;
+    text-align: left;
+    width: 95%;
+    margin: 0 auto;
+    overflow-y: scroll;
+}
+
+.row {
+    width: 100%;
+    margin: 0;
+    padding: 0 2em;
+}

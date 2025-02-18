@@ -1,0 +1,199 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Search</title>
+    <link rel="icon" type="image/x-icon" href="fav.png">
+
+    <!-- Tailwind CSS for utility classes -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- AOS for scroll animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <!-- Swiper for carousel effect -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <style>
+      /* Background Styling for Space Theme */
+      body {
+        background: radial-gradient(circle, #1a0033, #0d001a);
+        color: #ffffff;
+        font-family: 'DM Sans', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Curved Search Bar */
+      .proxy {
+        border-radius: 50px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease;
+      }
+      
+      .proxy:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Centered Content Styling */
+      .centered-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+      }
+
+      /* Title Styling */
+      .title-main {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #ff80ff;
+      }
+
+      .title-sub {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Footer Positioning */
+      footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+      }
+
+      /* Particle effect */
+      #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .settings-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .settings-dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: rgba(32, 32, 32, 0.9);
+        min-width: 180px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        z-index: 1;
+      }
+      .settings-dropdown-content a {
+        color: #ffffff;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 0.875rem;
+        transition: background-color 0.3s ease;
+      }
+      .settings-dropdown-content a:hover {
+        background-color: #4a4a4a;
+      }
+      .settings-dropdown:hover .settings-dropdown-content {
+        display: block;
+      }
+    </style>
+
+    <script src="https://kit.fontawesome.com/52676eb1e5.js" crossorigin="anonymous"></script>
+    <script src="/lf.js"></script>
+    <script async src="https://arc.io/widget.min.js#KpYQhCTB"></script>
+    <script src="settings.js" defer></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PWD8SS29YZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-PWD8SS29YZ');
+    </script>
+  </head>
+  <body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <header class="bg-transparent py-4">
+      <nav class="container mx-auto flex justify-between items-center px-4">
+        <a href="index.html" class="text-4xl font-extrabold text-purple-500"><i class="fas fa-rocket"></i> Space Games</a>
+        <div class="flex space-x-8 items-center text-xl">
+          <a href="index.html" class="nav-link text-lg font-bold"><i class="fas fa-home"></i> Home</a>
+          <a href="projects.html" class="nav-link text-lg font-bold"><i class="fas fa-gamepad"></i> Games</a>
+          <a href="search.html" class="nav-link text-lg font-bold"><i class="fas fa-shield-alt"></i> Proxy</a>
+          <a href="games.html" class="nav-link text-lg font-bold"><i class="fas fa-window-maximize"></i> Apps</a>
+          <a href="chat.html" class="nav-link text-lg font-bold"><i class="fas fa-comments"></i> Chat Room</a>
+          
+          <!-- Settings Dropdown -->
+          <div class="settings-dropdown">
+            <a href="#" class="nav-link text-lg font-bold"><i class="fas fa-cog"></i> Settings</a>
+            <div class="settings-dropdown-content">
+              <a href="settings.html" class="text-lg font-bold">Website Settings</a>
+              <a href="links.html" class="text-lg font-bold">Links</a>
+              <a href="#" class="text-lg font-bold">Made by: Shadow</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Centered Search Section -->
+    <div class="container mx-auto px-4 py-16 flex items-center justify-center flex-grow">
+      <div class="centered-content">
+        <h1 class="title-main">Search Privately</h1>
+        <h2 class="title-sub">A web proxy allows anonymous browsing by routing requests through a server, masking your IP and enhancing privacy.</h2>
+        <form id="uv-form" class="w-full md:w-2/3 lg:w-1/2 mt-6">
+          <input id="uv-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
+          <input id="uv-address" type="text" placeholder="Enter a URL or Search" class="proxy w-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-transparent py-8">
+      <p class="text-purple-400">© 2024 Space Games - Reach for the Stars!</p>
+    </footer>
+
+    <!-- Particle.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 86, density: { enable: true, value_area: 800 } },
+          color: { value: '#ffffff' },
+          shape: { type: 'circle', stroke: { width: 0, color: '#000000' }, polygon: { nb_sides: 5 } },
+          opacity: { value: 1, random: true },
+          size: { value: 2, random: true },
+          line_linked: { enable: false },
+          move: { enable: true, speed: 0.5, direction: 'bottom', out_mode: 'out' }
+        },
+        interactivity: {
+          detect_on: 'window',
+          events: { onclick: { enable: true, mode: 'push' } },
+          modes: { bubble: { distance: 400, size: 40, duration: 2 }, push: { particles_nb: 10 } }
+        },
+        retina_detect: true
+      });
+    </script>
+
+    <script src="uv/uv.bundle.js" defer></script>
+    <script src="uv/uv.config.js" defer></script>
+    <script src="/index.js" defer></script>
+    <script src="hotkey.js"></script>
+    <script>
+      __uv$config.sw;
+    </script>
+  </body>
+  </html> 
